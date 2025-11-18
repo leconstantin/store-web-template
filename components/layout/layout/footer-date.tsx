@@ -8,7 +8,7 @@ export default function FooterDate() {
 
   return (
     <p>
-      &copy; {copyrightDate} {siteConfig.name} All rights reserved.
+      &copy; {copyrightDate} {siteConfig.name} All rights reserved.d
     </p>
   );
 }
