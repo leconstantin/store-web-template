@@ -1,10 +1,11 @@
-import { ThemeSwitcher } from "@/components/custom/theme-switcher";
+import { HomeCarousel } from "@/features/web/home-carousel";
+import { ThreeItemGrid } from "@/features/web/three-item-grids";
 
 export default function Home() {
   return (
-    <div>
-      <ThemeSwitcher />
-      skhdjkshjdhjsd
-    </div>
+    <>
+      <ThreeItemGrid />
+      <HomeCarousel />
+    </>
   );
 }
