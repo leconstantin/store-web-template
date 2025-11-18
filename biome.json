@@ -23,6 +23,9 @@
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
+      },
+      "style": {
+        "useBlockStatements": "off"
       }
     },
     "domains": {
