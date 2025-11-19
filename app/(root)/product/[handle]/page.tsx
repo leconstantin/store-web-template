@@ -7,11 +7,7 @@ import { Gallery } from "@/features/web/product/gallery";
 import { ProductProvider } from "@/features/web/product/product-context";
 import { ProductDescription } from "@/features/web/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "@/shopify/constants";
-import {
-  getProduct,
-  getProductRecommendations,
-  getProducts,
-} from "@/shopify/index";
+import { getProduct, getProductRecommendations } from "@/shopify/index";
 import type { Image as ImageType } from "@/shopify/types";
 
 export async function generateMetadata(props: {
@@ -50,16 +46,21 @@ export async function generateMetadata(props: {
       : null,
   };
 }
-export async function generateStaticParams() {
-  const products = await getProducts({ query: "" });
+// export async function generateStaticParams() {
+//   const products = await getProducts({ query: "" });
 
-  return products.slice(0, 5).map((p) => ({
-    handle: p.handle,
-  }));
+//   return products.slice(0, 5).map((p) => ({
+//     handle: p.handle,
+//   }));
+// }
+export default function ProductPage(props: PageProps<"/product/[handle]">) {
+  return (
+    <Suspense fallback={null}>
+      <SuspendedProduct {...props} />
+    </Suspense>
+  );
 }
-export default async function ProductPage(props: {
-  params: Promise<{ handle: string }>;
-}) {
+async function SuspendedProduct(props: PageProps<"/product/[handle]">) {
   const params = await props.params;
   const product = await getProduct(params.handle);
 
@@ -81,9 +82,8 @@ export default async function ProductPage(props: {
       lowPrice: product.priceRange.minVariantPrice.amount,
     },
   };
-
   return (
-    <Suspense fallback={null}>
+    <>
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(productJsonLd),
@@ -120,7 +120,7 @@ export default async function ProductPage(props: {
 
         <RelatedProducts id={product.id} />
       </div>
-    </Suspense>
+    </>
   );
 }
 
