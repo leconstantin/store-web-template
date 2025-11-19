@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from "@/components/providers";
 import { META_THEME_COLORS, siteConfig } from "@/config/site";
 import { fontVariables } from "@/lib/fonts";
+import { baseUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     follow: true,
     index: true,
   },
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(baseUrl),
 };
 
 export default function RootLayout({

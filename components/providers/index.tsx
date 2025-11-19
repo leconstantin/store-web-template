@@ -15,6 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         {children}
       </AppProgressProvider>
       <Toaster closeButton />
+      {/* <WelcomeToast /> */}
       <TailwindIndicator />
     </ThemeProvider>
   );
