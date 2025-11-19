@@ -1,4 +1,4 @@
-import OpengraphImage from "@/components/custom/opengraph-image";
+import OpengraphImage from "@/components/opengraph-image";
 import { getCollection } from "@/shopify";
 
 export default async function Image({

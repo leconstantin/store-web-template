@@ -1,15 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import LogoIcon from "../icons/logo";
+import LogoIcon from "./icons/logo";
 
 export type Props = {
   title?: string;
 };
 
-export default async function OpengraphImage(
-  props?: Props
-): Promise<ImageResponse> {
+export default async function Image(props?: Props): Promise<ImageResponse> {
   const { title } = {
     ...{
       title: process.env.SITE_NAME,
