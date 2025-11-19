@@ -2,6 +2,7 @@ import type { Route } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import LogoSquare from "@/components/icons/logo-square";
+import { Button } from "@/components/ui/button";
 import { getMenu } from "@/shopify/index";
 import type { Menu } from "@/shopify/types";
 import MobileMenu from "./mobile-menu";
@@ -53,13 +54,11 @@ export async function SiteHeader() {
           </Suspense>
         </div>
         <div className="flex items-center justify-end gap-4 md:w-1/3">
-          <Link
-            className="text-muted-foreground text-sm underline-offset-4 hover:text-primary hover:underline"
-            href="/contact-us"
-            prefetch={true}
-          >
-            Contact Us
-          </Link>
+          <Button className="text-sm" size="sm">
+            <Link href="/contact" prefetch={true}>
+              Contact Us
+            </Link>
+          </Button>
         </div>
       </div>
     </nav>
