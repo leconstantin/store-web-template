@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/style/useThrowOnlyError: <explanation> */
 
-import { cacheLife, cacheTag, revalidateTag } from "next/cache";
+import { cacheLife, cacheTag, revalidateTag, updateTag } from "next/cache";
 import { headers as NextHeaders } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { ensureStartsWith } from "@/lib/utils";
@@ -405,11 +405,14 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (isCollectionUpdate) {
+    console.log("webhook called");
     revalidateTag(TAGS.collections, "max");
   }
 
   if (isProductUpdate) {
-    revalidateTag(TAGS.products, "max");
+    console.log("webhook called");
+
+    updateTag(TAGS.products);
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
