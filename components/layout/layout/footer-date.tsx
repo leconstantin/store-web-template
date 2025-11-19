@@ -4,11 +4,11 @@ import { siteConfig } from "@/config/site";
 
 export default function FooterDate() {
   const currentYear = new Date().getFullYear();
-  const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : "");
+  const copyrightDate = 2024 + (currentYear > 2024 ? `-${currentYear}` : "");
 
   return (
     <p>
-      &copy; {copyrightDate} {siteConfig.name} All rights reserved.d
+      &copy; {copyrightDate} {siteConfig.name} All rights reserved
     </p>
   );
 }

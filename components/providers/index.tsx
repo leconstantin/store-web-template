@@ -1,6 +1,7 @@
 "use client";
 import { AppProgressProvider } from "@bprogress/next";
 import { TailwindIndicator } from "../custom/tailwind-indicator";
+import { Toaster } from "../ui/sonner";
 import { ThemeProvider } from "./theme-provider";
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       >
         {children}
       </AppProgressProvider>
+      <Toaster />
       <TailwindIndicator />
     </ThemeProvider>
   );

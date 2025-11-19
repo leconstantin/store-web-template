@@ -48,10 +48,7 @@ export async function SiteFooter() {
           <Suspense>
             <FooterDate />
           </Suspense>
-          <hr className="mx-4 hidden h-4 w-px border-neutral-400 border-l md:inline-block" />
-          <p>
-            <a href="https://github.com/vercel/commerce">View the source</a>
-          </p>
+
           <p className="md:ml-auto">
             <a className="text-black dark:text-white" href="https://vercel.com">
               Created by 🏃‍♂️ {COMPANY_NAME}

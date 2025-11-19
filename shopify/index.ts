@@ -1,4 +1,6 @@
 /** biome-ignore-all lint/style/useThrowOnlyError: <explanation> */
+
+import { cacheLife, cacheTag } from "next/cache";
 import { ensureStartsWith } from "@/lib/utils";
 import {
   HIDDEN_PRODUCT_TAG,
@@ -268,9 +270,9 @@ const reshapeCollections = (collections: ShopifyCollection[]) => {
 };
 
 export async function getCollections(): Promise<Collection[]> {
-  // 'use cache';
-  // cacheTag(TAGS.collections);
-  // cacheLife('days');
+  "use cache";
+  cacheTag(TAGS.collections);
+  cacheLife("days");
 
   const res = await shopifyFetch<ShopifyCollectionsOperation>({
     query: getCollectionsQuery,
