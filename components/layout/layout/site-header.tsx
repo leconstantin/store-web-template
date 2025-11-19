@@ -1,10 +1,7 @@
-// import CartModal from 'components/cart/modal';
-
 import type { Route } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import LogoSquare from "@/components/icons/logo-square";
-import { Button } from "@/components/ui/button";
 import { getMenu } from "@/shopify/index";
 import type { Menu } from "@/shopify/types";
 import MobileMenu from "./mobile-menu";
@@ -39,7 +36,7 @@ export async function SiteHeader() {
               {menu.map((item: Menu) => (
                 <li key={item.title}>
                   <Link
-                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                    className="text-muted-foreground text-sm underline-offset-4 hover:text-primary hover:underline"
                     href={item.path as Route}
                     prefetch={true}
                   >
@@ -56,9 +53,13 @@ export async function SiteHeader() {
           </Suspense>
         </div>
         <div className="flex items-center justify-end gap-4 md:w-1/3">
-          <Button size="sm" variant={"link"}>
+          <Link
+            className="text-muted-foreground text-sm underline-offset-4 hover:text-primary hover:underline"
+            href="/contact-us"
+            prefetch={true}
+          >
             Contact Us
-          </Button>
+          </Link>
         </div>
       </div>
     </nav>

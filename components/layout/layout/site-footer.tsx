@@ -50,7 +50,10 @@ export async function SiteFooter() {
           </Suspense>
 
           <p className="md:ml-auto">
-            <a className="text-black dark:text-white" href="https://vercel.com">
+            <a
+              className="text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+              href="https://rathon-rw.com"
+            >
               Created by 🏃‍♂️ {COMPANY_NAME}
             </a>
           </p>

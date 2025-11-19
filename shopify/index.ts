@@ -13,6 +13,7 @@ import {
   getCollectionsQuery,
 } from "./queries/collection";
 import { getMenuQuery } from "./queries/menu";
+import { getPageQuery, getPagesQuery } from "./queries/page";
 import {
   getProductQuery,
   getProductRecommendationsQuery,
@@ -24,12 +25,15 @@ import type {
   Connection,
   Image,
   Menu,
+  Page,
   Product,
   ShopifyCollection,
   ShopifyCollectionOperation,
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
   ShopifyMenuOperation,
+  ShopifyPageOperation,
+  ShopifyPagesOperation,
   ShopifyProduct,
   ShopifyProductOperation,
   ShopifyProductRecommendationsOperation,
@@ -348,4 +352,20 @@ export async function getProductRecommendations(
   });
 
   return reshapeProducts(res.body.data.productRecommendations);
+}
+
+export async function getPage(handle: string): Promise<Page> {
+  const res = await shopifyFetch<ShopifyPageOperation>({
+    query: getPageQuery,
+    variables: { handle },
+  });
+
+  return res.body.data.pageByHandle;
+}
+export async function getPages(): Promise<Page[]> {
+  const res = await shopifyFetch<ShopifyPagesOperation>({
+    query: getPagesQuery,
+  });
+
+  return removeEdgesAndNodes(res.body.data.pages);
 }
