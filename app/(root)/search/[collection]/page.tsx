@@ -22,10 +22,9 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function CategoryPage(props: {
-  params: Promise<{ collection: string }>;
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+export default async function CategoryPage(
+  props: PageProps<"/search/[collection]">
+) {
   const searchParams = await props.searchParams;
   const params = await props.params;
   const { sort } = searchParams as { [key: string]: string };

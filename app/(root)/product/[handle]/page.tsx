@@ -53,7 +53,7 @@ export async function generateMetadata(props: {
 export async function generateStaticParams() {
   const products = await getProducts({ query: "" });
 
-  return products.map((p) => ({
+  return products.slice(0, 5).map((p) => ({
     handle: p.handle,
   }));
 }
@@ -83,7 +83,7 @@ export default async function ProductPage(props: {
   };
 
   return (
-    <ProductProvider>
+    <Suspense fallback={null}>
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(productJsonLd),
@@ -91,31 +91,36 @@ export default async function ProductPage(props: {
         type="application/ld+json"
       />
       <div className="mx-auto w-full max-w-[1536px] px-4 pt-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
-          <div className="h-full w-full basis-full border-neutral-200 border-r lg:basis-4/6 dark:border-neutral-800">
-            <Suspense
-              fallback={
-                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
-              }
-            >
-              <Gallery
-                images={product.images.slice(0, 5).map((image: ImageType) => ({
-                  src: image.url,
-                  altText: image.altText,
-                }))}
-              />
-            </Suspense>
-          </div>
+        <ProductProvider>
+          <div className="flex flex-col rounded-lg border border-neutral-200 bg-white lg:flex-row dark:border-neutral-800 dark:bg-black">
+            <div className="h-full w-full basis-full border-neutral-200 border-r px-6 lg:basis-3/5 dark:border-neutral-800">
+              <Suspense
+                fallback={
+                  <div className="relative aspect-square h-full min-h-[550px] w-full overflow-hidden" />
+                }
+              >
+                <Gallery
+                  images={product.images
+                    .slice(0, 5)
+                    .map((image: ImageType) => ({
+                      src: image.url,
+                      altText: image.altText,
+                    }))}
+                />
+              </Suspense>
+            </div>
 
-          <div className="basis-full lg:basis-2/6">
-            <Suspense fallback={null}>
-              <ProductDescription product={product} />
-            </Suspense>
+            <div className="basis-full p-6 lg:basis-2/5">
+              <Suspense fallback={null}>
+                <ProductDescription product={product} />
+              </Suspense>
+            </div>
           </div>
-        </div>
+        </ProductProvider>
+
         <RelatedProducts id={product.id} />
       </div>
-    </ProductProvider>
+    </Suspense>
   );
 }
 

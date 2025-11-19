@@ -16,7 +16,7 @@ export default function Search({ onSubmit }: { onSubmit?: () => void }) {
     >
       <Input
         autoComplete="off"
-        // className="w-full rounded-lg border bg-white px-4 py-2 text-black text-md placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
+        className="shadow-none"
         defaultValue={searchParams?.get("q") || ""}
         key={searchParams?.get("q")}
         name="q"
@@ -24,7 +24,7 @@ export default function Search({ onSubmit }: { onSubmit?: () => void }) {
         type="text"
       />
       <div className="absolute top-0 right-0 mr-3 flex h-full items-center">
-        <SearchIcon className="h-4" />
+        <SearchIcon className="h-4 text-muted-foreground" />
       </div>
     </Form>
   );

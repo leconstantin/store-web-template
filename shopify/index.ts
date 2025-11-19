@@ -1,6 +1,8 @@
 /** biome-ignore-all lint/style/useThrowOnlyError: <explanation> */
 
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag, revalidateTag } from "next/cache";
+import { headers as NextHeaders } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
 import { ensureStartsWith } from "@/lib/utils";
 import {
   HIDDEN_PRODUCT_TAG,
@@ -120,6 +122,9 @@ export async function shopifyFetch<T>({
 }
 
 export async function getMenu(handle: string): Promise<Menu[]> {
+  "use cache";
+  cacheTag(TAGS.collections);
+  cacheLife("days");
   const res = await shopifyFetch<ShopifyMenuOperation>({
     query: getMenuQuery,
     tags: [TAGS.collections],
@@ -197,9 +202,9 @@ export async function getCollectionProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  // 'use cache';
-  // cacheTag(TAGS.collections, TAGS.products);
-  // cacheLife('days');
+  "use cache";
+  cacheTag(TAGS.collections, TAGS.products);
+  cacheLife("days");
 
   const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
     query: getCollectionProductsQuery,
@@ -229,9 +234,9 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  // "use cache";
-  // cacheTag(TAGS.products);
-  // cacheLife("days");
+  "use cache";
+  cacheTag(TAGS.products);
+  cacheLife("days");
 
   const res = await shopifyFetch<ShopifyProductsOperation>({
     query: getProductsQuery,
@@ -306,9 +311,9 @@ export async function getCollections(): Promise<Collection[]> {
 export async function getCollection(
   handle: string
 ): Promise<Collection | undefined> {
-  // 'use cache';
-  // cacheTag(TAGS.collections);
-  // cacheLife('days');
+  "use cache";
+  cacheTag(TAGS.collections);
+  cacheLife("days");
 
   const res = await shopifyFetch<ShopifyCollectionOperation>({
     query: getCollectionQuery,
@@ -321,9 +326,9 @@ export async function getCollection(
 }
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
-  // "use cache";
-  // cacheTag(TAGS.products);
-  // cacheLife("days");
+  "use cache";
+  cacheTag(TAGS.products);
+  cacheLife("days");
 
   const res = await shopifyFetch<ShopifyProductOperation>({
     query: getProductQuery,
@@ -339,9 +344,9 @@ export async function getProduct(handle: string): Promise<Product | undefined> {
 export async function getProductRecommendations(
   productId: string
 ): Promise<Product[]> {
-  // "use cache";
-  // cacheTag(TAGS.products);
-  // cacheLife("days");
+  "use cache";
+  cacheTag(TAGS.products);
+  cacheLife("days");
 
   const res = await shopifyFetch<ShopifyProductRecommendationsOperation>({
     query: getProductRecommendationsQuery,
@@ -368,4 +373,44 @@ export async function getPages(): Promise<Page[]> {
   });
 
   return removeEdgesAndNodes(res.body.data.pages);
+}
+
+// This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
+export async function revalidate(req: NextRequest): Promise<NextResponse> {
+  // We always need to respond with a 200 status code to Shopify,
+  // otherwise it will continue to retry the request.
+  const collectionWebhooks = [
+    "collections/create",
+    "collections/delete",
+    "collections/update",
+  ];
+  const productWebhooks = [
+    "products/create",
+    "products/delete",
+    "products/update",
+  ];
+  const topic = (await NextHeaders()).get("x-shopify-topic") || "unknown";
+  const secret = req.nextUrl.searchParams.get("secret");
+  const isCollectionUpdate = collectionWebhooks.includes(topic);
+  const isProductUpdate = productWebhooks.includes(topic);
+
+  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+    console.error("Invalid revalidation secret.");
+    return NextResponse.json({ status: 401 });
+  }
+
+  if (!(isCollectionUpdate || isProductUpdate)) {
+    // We don't need to revalidate anything for any other topics.
+    return NextResponse.json({ status: 200 });
+  }
+
+  if (isCollectionUpdate) {
+    revalidateTag(TAGS.collections, "max");
+  }
+
+  if (isProductUpdate) {
+    revalidateTag(TAGS.products, "max");
+  }
+
+  return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
 }

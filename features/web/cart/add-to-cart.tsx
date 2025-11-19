@@ -146,7 +146,7 @@ export function AddToCart({ product }: { product: Product }) {
       toast.custom((t) => (
         <div
           className={cn(
-            "flex w-[420px] flex-col gap-5 rounded-lg border border-muted bg-background p-4 shadow-2xl"
+            "mt-auto flex w-[420px] flex-col gap-5 rounded-lg border border-muted bg-background p-4 shadow-2xl"
           )}
         >
           <div className="flex flex-col gap-2">

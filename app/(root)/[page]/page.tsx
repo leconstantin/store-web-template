@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Prose from "@/features/web/product/prose";
-import { getPage } from "@/shopify";
+import { getPage, getPages } from "@/shopify";
 
-export async function generateMetadata(props: {
-  params: Promise<{ page: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: PageProps<"/[page]">
+): Promise<Metadata> {
   const params = await props.params;
   const page = await getPage(params.page);
 
@@ -21,10 +21,14 @@ export async function generateMetadata(props: {
     },
   };
 }
+export async function generateStaticParams() {
+  const pages = await getPages();
 
-export default async function Page(props: {
-  params: Promise<{ page: string }>;
-}) {
+  return pages.map((p) => ({
+    page: p.handle,
+  }));
+}
+export default async function Page(props: PageProps<"/[page]">) {
   const params = await props.params;
   const page = await getPage(params.page);
 
