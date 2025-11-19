@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Rathon",
-  url: "https://www.rathon-rw.com", // Replace with production URL
+  url: "http://ecommerce-template-sigma.vercel.app", // Replace with production URL
   ogImage: "https://www.rathon-rw.com/opengraph-image.png",
   description:
     "Rathon is a Rwanda-based web agency offering design and development to build bold brands, high-performing websites, and digital platforms that help businesses succeed.",
