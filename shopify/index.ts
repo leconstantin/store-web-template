@@ -406,12 +406,12 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
 
   if (isCollectionUpdate) {
     // console.log("webhook called");
-    revalidateTag(TAGS.collections, "max");
+    revalidateTag(TAGS.collections, { expire: 0 });
   }
 
   if (isProductUpdate) {
     // console.log("webhook called");
-    revalidateTag(TAGS.products, "max");
+    revalidateTag(TAGS.products, { expire: 0 });
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });
