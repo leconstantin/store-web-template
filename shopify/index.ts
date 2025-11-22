@@ -208,6 +208,7 @@ export async function getCollectionProducts({
 
   const res = await shopifyFetch<ShopifyCollectionProductsOperation>({
     query: getCollectionProductsQuery,
+    tags: [TAGS.collections, TAGS.products],
     variables: {
       handle: collection,
       reverse,
@@ -285,6 +286,7 @@ export async function getCollections(): Promise<Collection[]> {
 
   const res = await shopifyFetch<ShopifyCollectionsOperation>({
     query: getCollectionsQuery,
+    tags: [TAGS.collections],
   });
   const shopifyCollections = removeEdgesAndNodes(res.body?.data?.collections);
   const collections = [
@@ -317,6 +319,7 @@ export async function getCollection(
 
   const res = await shopifyFetch<ShopifyCollectionOperation>({
     query: getCollectionQuery,
+    tags: [TAGS.collections],
     variables: {
       handle,
     },
@@ -405,12 +408,10 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (isCollectionUpdate) {
-    // console.log("webhook called");
     revalidateTag(TAGS.collections, { expire: 0 });
   }
 
   if (isProductUpdate) {
-    // console.log("webhook called");
     revalidateTag(TAGS.products, { expire: 0 });
   }
 
